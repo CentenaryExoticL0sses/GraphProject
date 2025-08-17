@@ -39,21 +39,12 @@ public struct EdgeObjectData
 
 public class GraphContainer : MonoBehaviour
 {
-    [SerializeField] 
-    private VertexDisplayObject _vertexPrefab;
+    [Header("״אבכמםû מבתוךעמג")]
+    [SerializeField] private VertexDisplayObject _vertexPrefab;
+    [SerializeField] private EdgeDisplayObject _edgePrefab;
 
-    [SerializeField] 
-    private EdgeDisplayObject _edgePrefab;
-
-    public IReadOnlyList<VertexDisplayObject> Vertices
-    {
-        get => new ReadOnlyCollection<VertexDisplayObject>(_vertices);
-    }
-
-    public IReadOnlyList<EdgeDisplayObject> Edges
-    {
-        get => new ReadOnlyCollection<EdgeDisplayObject>(_edges);
-    }
+    public IReadOnlyList<VertexDisplayObject> Vertices => _vertices;
+    public IReadOnlyList<EdgeDisplayObject> Edges => _edges;
 
     private Graph _graph;
     private List<VertexDisplayObject> _vertices;
@@ -64,16 +55,6 @@ public class GraphContainer : MonoBehaviour
         _graph = new Graph();
         _vertices = new List<VertexDisplayObject>();
         _edges = new List<EdgeDisplayObject>();
-        if (_vertexPrefab == null)
-        {
-            _vertexPrefab = Resources.Load<VertexDisplayObject>("Prefabs/DefaultVertex");
-            Debug.Log(_vertexPrefab);
-        }
-        if (_edgePrefab == null)
-        {
-            _edgePrefab = Resources.Load<EdgeDisplayObject>("Prefabs/DefaultEdge");
-            Debug.Log(_edgePrefab);
-        }
     }
 
     public void LoadGraph(List<VertexObjectData> vertices, List<EdgeObjectData> edges)
