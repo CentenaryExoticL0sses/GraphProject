@@ -1,5 +1,4 @@
-
-namespace Graphs
+namespace GraphProject.Core.Data
 {
     public class VertexData
     {

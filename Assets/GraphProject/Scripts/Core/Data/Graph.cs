@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Graphs
+namespace GraphProject.Core.Data
 {
     public class Graph
     {

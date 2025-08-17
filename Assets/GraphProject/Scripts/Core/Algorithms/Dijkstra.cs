@@ -1,7 +1,7 @@
-using System;
+using GraphProject.Core.Data;
 using System.Collections.Generic;
 
-namespace Graphs
+namespace GraphProject.Core.Algorithms
 {
     public class Dijkstra
     {
@@ -88,12 +88,12 @@ namespace Graphs
 
         private List<int> GetPath(Vertex startVertex, Vertex endVertex)
         {
-            List<int> path = new List<int>{ endVertex.ID };
+            List<int> path = new List<int> { endVertex.ID };
 
             while (startVertex != endVertex)
             {
                 endVertex = GetVertexData(endVertex).PreviousVertex;
-                if(endVertex == null)
+                if (endVertex == null)
                     break;
 
                 path.Add(endVertex.ID);

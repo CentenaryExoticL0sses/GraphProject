@@ -1,8 +1,8 @@
 using UnityEngine;
-using Graphs;
 using System.Collections.Generic;
 using System;
-using System.Collections.ObjectModel;
+using GraphProject.Core.Data;
+using GraphProject.Core.Algorithms;
 
 
 //Структура для хранения даннх об объекте вершины
