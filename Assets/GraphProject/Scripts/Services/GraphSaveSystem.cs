@@ -1,3 +1,4 @@
+using GraphProject.Visualization;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -6,7 +7,7 @@ namespace GraphProject.Services
 {
     public class GraphSaveSystem : MonoBehaviour
     {
-        [SerializeField] private GraphContainer _graphContainer;
+        private GraphContainer _graphContainer;
 
         private string _saveFolder;
 
@@ -18,6 +19,11 @@ namespace GraphProject.Services
             {
                 Directory.CreateDirectory(_saveFolder);
             }
+        }
+
+        public void Initialize(GraphContainer graphContainer)
+        {
+            _graphContainer = graphContainer;
         }
 
         public void SaveGraph()

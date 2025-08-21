@@ -1,18 +1,21 @@
 using GraphProject.Tools;
+using GraphProject.Visualization;
 using UnityEngine;
 
 namespace GraphProject.Tools.States
 {
     public class VertexCreationState : ICreationState
     {
-        private GraphContainer _graphContainer;
-        private GraphPartSelector _partSelector;
+        private readonly GraphContainer _graphContainer;
+        private readonly GraphPartSelector _partSelector;
 
         public VertexCreationState(GraphContainer container, GraphPartSelector selector)
         {
             _partSelector = selector;
             _graphContainer = container;
         }
+
+        public void Enter() { }
 
         public void OnAction(Vector2 position)
         {
@@ -24,10 +27,9 @@ namespace GraphProject.Tools.States
             _partSelector.SelectVertex(vertex);
         }
 
-        public void EndState()
+        public void Exit()
         {
             _partSelector?.DeselectVertices();
         }
-
     }
 }

@@ -4,7 +4,10 @@ namespace GraphProject.Tools.States
 {
     public interface ICreationState
     {
+        public void Enter();
+
         void OnAction(Vector2 position);
-        void EndState();
+
+        public void Exit();
     }
 }

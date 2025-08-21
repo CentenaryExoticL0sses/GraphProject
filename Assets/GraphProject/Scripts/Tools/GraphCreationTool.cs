@@ -3,29 +3,25 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using GraphProject.InputControls;
 using GraphProject.Tools.States;
+using GraphProject.Visualization;
 
 namespace GraphProject.Tools
 {
     public class GraphCreationTool : MonoBehaviour
     {
-        [SerializeField]
         private GraphContainer _graphContainer;
-
         private GraphPartSelector _partSelector;
+
         private ICreationState _creationState;
         private GraphActions _actions;
+
         private bool _isOverUI;
 
-        public void Initialize()
+        public void Initialize(GraphContainer graphContainer, GraphPartSelector partSelector)
         {
             _creationState = null;
-            _partSelector = new GraphPartSelector();
-            if (_graphContainer == null)
-            {
-                _graphContainer = new GameObject("GraphContainer").AddComponent<GraphContainer>();
-                _graphContainer.Initialize();
-            }
-
+            _graphContainer = graphContainer;
+            _partSelector = partSelector;
         }
 
         private void OnEnable()
@@ -48,7 +44,10 @@ namespace GraphProject.Tools
             CancelAnyState();
         }
 
-        //Выполнение функции выбранного режима по нажатию ЛКМ
+        /// <summary>
+        /// Выполнение функции выбранного режима по нажатию ЛКМ
+        /// </summary>
+        /// <param name="context"></param>
         private void GraphMouseAction(InputAction.CallbackContext context)
         {
             if (_isOverUI)
@@ -66,7 +65,6 @@ namespace GraphProject.Tools
                 _isOverUI = EventSystem.current.IsPointerOverGameObject();
         }
 
-        //Выбор режима работы инструмента
         public void CreateVertex()
         {
             CancelAnyState();
@@ -90,7 +88,7 @@ namespace GraphProject.Tools
         {
             if (_creationState != null)
             {
-                _creationState.EndState();
+                _creationState.Exit();
                 _creationState = null;
             }
         }

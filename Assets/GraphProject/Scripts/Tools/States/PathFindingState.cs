@@ -1,4 +1,5 @@
 using GraphProject.Tools;
+using GraphProject.Visualization;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,14 +7,16 @@ namespace GraphProject.Tools.States
 {
     public class PathFindingState : ICreationState
     {
-        private GraphContainer _graphContainer;
-        private GraphPartSelector _partSelector;
+        private readonly GraphContainer _graphContainer;
+        private readonly GraphPartSelector _partSelector;
 
         public PathFindingState(GraphContainer container, GraphPartSelector selector)
         {
             _partSelector = selector;
             _graphContainer = container;
         }
+
+        public void Enter() { }
 
         public void OnAction(Vector2 position)
         {
@@ -26,12 +29,12 @@ namespace GraphProject.Tools.States
             _partSelector.SelectVertex(position);
             if (_partSelector.SelectedVertices.Count >= 2)
             {
-                List<int> path = _graphContainer.FindShortestPath(_partSelector.SelectedVertices[0].Data.ID, _partSelector.SelectedVertices[1].Data.ID);
+                List<int> path = _graphContainer.FindShortestPath(_partSelector.SelectedVertices[0], _partSelector.SelectedVertices[1]);
                 SelectPath(path);
             }
         }
 
-        public void EndState()
+        public void Exit()
         {
             _partSelector.DeselectVertices();
             _partSelector.DeselectEdges();

@@ -1,22 +1,27 @@
+using GraphProject.Visualization;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GraphProject.Tools
 {
-
-    //Класс, отвечающий за выделение части графа
+    /// <summary>
+    /// Класс, отвечающий за выделение части графа
+    /// </summary>
     public class GraphPartSelector
     {
-        public IReadOnlyList<VertexDisplayObject> SelectedVertices => _selectedVertices;
-        public IReadOnlyList<EdgeDisplayObject> SelectedEdges => _selectedEdges;
+        public IReadOnlyList<int> SelectedVertices => _selectedVertices;
+        public IReadOnlyList<(int, int)> SelectedEdges => _selectedEdges;
 
-        private List<VertexDisplayObject> _selectedVertices;
-        private List<EdgeDisplayObject> _selectedEdges;
+        private readonly GraphContainer _graphContainer;
 
-        public GraphPartSelector()
+        private readonly List<int> _selectedVertices;
+        private readonly List<(int, int)> _selectedEdges;
+
+        public GraphPartSelector(GraphContainer container)
         {
-            _selectedVertices = new List<VertexDisplayObject>();
-            _selectedEdges = new List<EdgeDisplayObject>();
+            _graphContainer = container;
+            _selectedVertices = new List<int>();
+            _selectedEdges = new List<(int, int)>();
         }
 
         //Получение вершины по нажатию на неё
@@ -34,48 +39,64 @@ namespace GraphProject.Tools
             return null;
         }
 
-        //Выделение вершины
+        /// <summary>
+        /// Выделение вершины в позиции.
+        /// </summary>
+        /// <param name="position">Позиция на экране.</param>
         public void SelectVertex(Vector2 position)
         {
             var vertex = GetVertexAtPosition(position);
             SelectVertex(vertex);
         }
 
+        /// <summary>
+        /// Выделение вершины.
+        /// </summary>
+        /// <param name="vertex">Выделяемая вершина.</param>
         public void SelectVertex(VertexDisplayObject vertex)
         {
             if (vertex != null)
             {
                 vertex.Select();
-                _selectedVertices.Add(vertex);
+                _selectedVertices.Add(vertex.Data.ID);
             }
         }
 
-        //Выделение ребра
+        /// <summary>
+        /// Выделение ребра
+        /// </summary>
+        /// <param name="edge">Выбираемое ребро.</param>
         public void SelectEdge(EdgeDisplayObject edge)
         {
             if (edge != null)
             {
                 edge.Select();
-                _selectedEdges.Add(edge);
+                _selectedEdges.Add((edge.Data.FirstVertexID, edge.Data.SecondVertexID));
             }
         }
 
-        //Сброс всех выделенных вершин
+        /// <summary>
+        /// Сброс всех выделенных вершин.
+        /// </summary>
         public void DeselectVertices()
         {
-            foreach (var vertex in _selectedVertices)
+            foreach (var vertexId in _selectedVertices)
             {
-                vertex.Deselect();
+                VertexDisplayObject vertex = _graphContainer.GetVertexObject(vertexId);
+                if (vertex) vertex.Deselect();
             }
             _selectedVertices.Clear();
         }
 
-        //Сброс всех выделенных рёбер
+        /// <summary>
+        /// Сброс всех выделенных рёбер.
+        /// </summary>
         public void DeselectEdges()
         {
-            foreach (var edge in _selectedEdges)
+            foreach ((int first, int second) in _selectedEdges)
             {
-                edge.Deselect();
+                EdgeDisplayObject edge = _graphContainer.GetEdgeObject(first, second);
+                if(edge) edge.Deselect();
             }
             _selectedEdges.Clear();
         }
