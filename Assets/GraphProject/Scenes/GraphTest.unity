@@ -418,8 +418,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 845116373}
-        m_TargetAssemblyTypeName: GraphCreationTool, Assembly-CSharp
-        m_MethodName: CreateVertex
+        m_TargetAssemblyTypeName: GraphProject.Tools.GraphCreationTool, Assembly-CSharp
+        m_MethodName: DeleteVertex
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1726,8 +1726,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 845116373}
-        m_TargetAssemblyTypeName: GraphCreationTool, Assembly-CSharp
-        m_MethodName: CreateEdge
+        m_TargetAssemblyTypeName: GraphProject.Tools.GraphCreationTool, Assembly-CSharp
+        m_MethodName: DeleteEdge
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

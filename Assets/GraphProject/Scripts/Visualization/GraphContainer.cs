@@ -94,14 +94,21 @@ namespace GraphProject.Visualization
             return null;
         }
 
-        //Поиск кратчайшего пути
+        /// <summary>
+        /// Поиск кратчайшего пути
+        /// </summary>
+        /// <param name="firstID">Начало пути.</param>
+        /// <param name="secondID">Конец пути.</param>
+        /// <returns></returns>
         public List<int> FindShortestPath(int firstID, int secondID)
         {
-            Dijkstra dijkstra = new Dijkstra(_graph);
-            return dijkstra.FindShortestPath(firstID, secondID);
+            Dijkstra dijkstra = new();
+            return dijkstra.FindShortestPath(_graph, firstID, secondID);
         }
 
-        //Очистка графа, удаление всех вершин и рёбер
+        /// <summary>
+        /// Очистка графа, удаление всех вершин и рёбер
+        /// </summary>
         public void ClearGraph()
         {
             foreach (var edge in _edges)
@@ -117,13 +124,22 @@ namespace GraphProject.Visualization
             _graph = new Graph();
         }
 
-        //Поиск вершины по её ID
+        /// <summary>
+        /// Поиск вершины по её ID
+        /// </summary>
+        /// <param name="id">ID вершины.</param>
+        /// <returns>Визуальное представление вершины.</returns>
         public VertexDisplayObject GetVertexObject(int id)
         {
             return _vertices.Find(vertex => vertex.Data.ID == id);
         }
 
-        //Поиск ребра по ID связанных вершин
+        /// <summary>
+        /// Поиск ребра по ID связанных вершин
+        /// </summary>
+        /// <param name="firstID">ID начальной вершины.</param>
+        /// <param name="secondID">ID конечной вершины.</param>
+        /// <returns></returns>
         public EdgeDisplayObject GetEdgeObject(int firstID, int secondID)
         {
             var edge = _edges.Find(edge => edge.Data.FirstVertexID == firstID && edge.Data.SecondVertexID == secondID);

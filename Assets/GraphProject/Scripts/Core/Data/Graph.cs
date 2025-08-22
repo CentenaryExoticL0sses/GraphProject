@@ -4,38 +4,30 @@ namespace GraphProject.Core.Data
 {
     public class Graph
     {
-        public List<Vertex> Vertices { get; }
+        public IReadOnlyDictionary<int, Vertex> Vertices => _vertices;
+
+        private readonly Dictionary<int, Vertex> _vertices;
 
         public Graph()
         {
-            Vertices = new List<Vertex>();
+            _vertices = new Dictionary<int, Vertex>();
         }
 
-        public Vertex AddVertex(int id)
+        public bool AddVertex(int id)
         {
-            Vertex newVertex = new Vertex(id);
-            Vertices.Add(newVertex);
-            return newVertex;
+            Vertex newVertex = new(id);
+            return _vertices.TryAdd(id, newVertex);
         }
 
-        public Vertex FindVertex(int id)
+        public bool RemoveVertex(int id)
         {
-            foreach (Vertex vertex in Vertices)
-            {
-                if (vertex.ID == id)
-                {
-                    return vertex;
-                }
-            }
-
-            return null;
+            return _vertices.Remove(id);
         }
 
         public void AddEdge(int firstID, int secondID, float weight)
         {
-            Vertex firstVertex = FindVertex(firstID);
-            Vertex secondVertex = FindVertex(secondID);
-            if (firstVertex != null && secondVertex != null)
+            if(_vertices.TryGetValue(firstID, out Vertex firstVertex) && 
+                _vertices.TryGetValue(secondID, out Vertex secondVertex))
             {
                 firstVertex.AddEdge(secondVertex, weight);
                 secondVertex.AddEdge(firstVertex, weight);

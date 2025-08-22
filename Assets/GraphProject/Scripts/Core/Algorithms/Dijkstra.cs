@@ -1,62 +1,24 @@
-using GraphProject.Core.Data;
 using System.Collections.Generic;
+using GraphProject.Core.Data;
 
 namespace GraphProject.Core.Algorithms
 {
     public class Dijkstra
     {
-        private Graph _graph;
         private List<VertexData> _vertexData;
 
-        public Dijkstra(Graph graph)
+        public List<int> FindShortestPath(Graph graph, int startID, int finishID)
         {
-            _graph = graph;
-        }
-
-        private void InitData()
-        {
-            _vertexData = new List<VertexData>();
-            foreach (Vertex vertex in _graph.Vertices)
+            if(graph.Vertices.TryGetValue(startID, out var startVertex) && graph.Vertices.TryGetValue(finishID, out var endVertex))
             {
-                _vertexData.Add(new VertexData(vertex));
+                return FindShortestPath(graph, startVertex, endVertex);
             }
+            return new List<int>();
         }
 
-        private VertexData GetVertexData(Vertex vertex)
+        public List<int> FindShortestPath(Graph graph, Vertex startVertex, Vertex finishVertex)
         {
-            foreach (VertexData data in _vertexData)
-            {
-                if (data.Vertex.Equals(vertex))
-                {
-                    return data;
-                }
-            }
-            return null;
-        }
-
-        public VertexData FindUnvisitedVertexWithMinSum()
-        {
-            float minValue = float.MaxValue;
-            VertexData minVertexInfo = null;
-            foreach (VertexData data in _vertexData)
-            {
-                if (data.IsUnvisited && data.EdgesWeightSum < minValue)
-                {
-                    minVertexInfo = data;
-                    minValue = data.EdgesWeightSum;
-                }
-            }
-            return minVertexInfo;
-        }
-
-        public List<int> FindShortestPath(int startID, int finishID)
-        {
-            return FindShortestPath(_graph.FindVertex(startID), _graph.FindVertex(finishID));
-        }
-
-        public List<int> FindShortestPath(Vertex startVertex, Vertex finishVertex)
-        {
-            InitData();
+            InitData(graph);
             VertexData first = GetVertexData(startVertex);
             first.EdgesWeightSum = 0;
             while (true)
@@ -69,6 +31,32 @@ namespace GraphProject.Core.Algorithms
                 SetSumToNextVertex(current);
             }
             return GetPath(startVertex, finishVertex);
+        }
+
+        private void InitData(Graph graph)
+        {
+            _vertexData = new List<VertexData>(graph.Vertices.Count);
+
+            foreach (Vertex vertex in graph.Vertices.Values)
+            {
+                _vertexData.Add(new VertexData(vertex));
+            }
+        }
+
+        private VertexData FindUnvisitedVertexWithMinSum()
+        {
+            float minValue = float.MaxValue;
+            VertexData minVertexInfo = null;
+
+            foreach (VertexData data in _vertexData)
+            {
+                if (data.IsUnvisited && data.EdgesWeightSum < minValue)
+                {
+                    minVertexInfo = data;
+                    minValue = data.EdgesWeightSum;
+                }
+            }
+            return minVertexInfo;
         }
 
         private void SetSumToNextVertex(VertexData data)
@@ -88,7 +76,7 @@ namespace GraphProject.Core.Algorithms
 
         private List<int> GetPath(Vertex startVertex, Vertex endVertex)
         {
-            List<int> path = new List<int> { endVertex.ID };
+            List<int> path = new() { endVertex.ID };
 
             while (startVertex != endVertex)
             {
@@ -99,6 +87,18 @@ namespace GraphProject.Core.Algorithms
                 path.Add(endVertex.ID);
             }
             return path;
+        }
+
+        private VertexData GetVertexData(Vertex vertex)
+        {
+            foreach (VertexData data in _vertexData)
+            {
+                if (data.Vertex.Equals(vertex))
+                {
+                    return data;
+                }
+            }
+            return null;
         }
     }
 }

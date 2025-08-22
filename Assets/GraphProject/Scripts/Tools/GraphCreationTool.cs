@@ -44,53 +44,56 @@ namespace GraphProject.Tools
             CancelAnyState();
         }
 
-        /// <summary>
-        /// Выполнение функции выбранного режима по нажатию ЛКМ
-        /// </summary>
-        /// <param name="context"></param>
         private void GraphMouseAction(InputAction.CallbackContext context)
         {
-            if (_isOverUI)
-                return;
+            if (_isOverUI) return;
             Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            if (_creationState != null)
-            {
-                _creationState.OnAction(worldPosition);
-            }
+            _creationState?.OnAction(worldPosition);
         }
 
         private void Update()
         {
             if (_creationState != null)
-                _isOverUI = EventSystem.current.IsPointerOverGameObject();
-        }
-
-        public void CreateVertex()
-        {
-            CancelAnyState();
-            _creationState = new VertexCreationState(_graphContainer, _partSelector);
-        }
-
-        public void CreateEdge()
-        {
-            CancelAnyState();
-            _creationState = new EdgeCreationState(_graphContainer, _partSelector);
-        }
-
-        public void FindPath()
-        {
-            CancelAnyState();
-            _creationState = new PathFindingState(_graphContainer, _partSelector);
-        }
-
-        //Сброс режима работы инструмента
-        public void CancelAnyState()
-        {
-            if (_creationState != null)
             {
-                _creationState.Exit();
-                _creationState = null;
+                _isOverUI = EventSystem.current.IsPointerOverGameObject();
             }
+        }
+
+        /// <summary>
+        /// Режим создания вершин.
+        /// </summary>
+        public void CreateVertex() => SetState(new VertexCreationState(_graphContainer, _partSelector));
+
+        /// <summary>
+        /// Режим удаления вершин.
+        /// </summary>
+        public void DeleteVertex() => SetState(new VertexRemovalState(_graphContainer, _partSelector));
+
+        /// <summary>
+        /// режим создания рёбер.
+        /// </summary>
+        public void CreateEdge() => SetState(new EdgeCreationState(_graphContainer, _partSelector));
+
+        /// <summary>
+        /// Режим удаления рёбер.
+        /// </summary>
+        public void DeleteEdge() => SetState(new EdgeRemovalState(_graphContainer, _partSelector));
+
+        /// <summary>
+        /// Режим поиска пути.
+        /// </summary>
+        public void FindPath() => SetState(new PathFindingState(_graphContainer, _partSelector));
+
+        /// <summary>
+        /// Сброс любого режима.
+        /// </summary>
+        public void CancelAnyState() => SetState(null);
+
+        private void SetState(ICreationState state)
+        {
+            _creationState?.Exit();
+            _creationState = state;
+            _creationState?.Enter();
         }
     }
 }
